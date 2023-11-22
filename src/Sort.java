@@ -1,56 +1,43 @@
-import java.util.ArrayList;
-import java.util.List;
-
 public class Sort {
-    public static List<Integer> selectionSort(int[] arr, int mode) {
-        ArrayList<Integer> newArr = new ArrayList<>();
-        ArrayList<Integer> arrClone = new ArrayList<>();
-        for (int i:arr) {
-            arrClone.add(i);
-        }
-        int length = arrClone.size();
-        if (mode == 0) {
-            for (int i=0; i<length; i++){
-                int smallest = findSmallest(arrClone);
-                newArr.add(arrClone.get(smallest));
-                arrClone.remove(smallest);
+    public static int[] selectionSort(int[] arr, int mode) {
+        int[] newArr = new int[arr.length];
+        int[] arrClone = arr;
+        for (int i=0; i<arr.length; i++){
+            int index = 0;
+            if (arrClone.length > 1) {
+                index = findIndex(arrClone, mode);
             }
-        } else {
-            for (int i=0; i<length; i++){
-                int smallest = findBiggest(arrClone);
-                newArr.add(arrClone.get(smallest));
-                arrClone.remove(smallest);
-            }
+            newArr[i] = arrClone[index];
+            arrClone = arrCopyWithRm(arrClone, index);
         }
-
         return newArr;
     }
 
-    private static int findSmallest(ArrayList<Integer> arr) {
-        int smallest = arr.get(0);
-        int smallest_index = 0;
-        for (int i=1; i<arr.size(); i++) {
-            if (arr.get(i) < smallest){
-                smallest = arr.get(i);
-                smallest_index = i;
-            } else {
-                continue;
+    public static int[] arrCopyWithRm(int[] arr, int indexRm) {
+        int[] arrClone = new int[arr.length-1];
+
+        for (int i=0; i<arr.length; i++) {
+            if (i < indexRm) {
+                arrClone[i] = arr[i];
+            } else if (i > indexRm) {
+                arrClone[i-1] = arr[i];
             }
         }
-        return smallest_index;
+        return arrClone;
     }
 
-    private static int findBiggest(ArrayList<Integer> arr) {
-        int biggest = arr.get(0);
-        int biggest_index = 0;
-        for (int i=1; i<arr.size(); i++) {
-            if (arr.get(i) > biggest){
-                biggest = arr.get(i);
-                biggest_index = i;
+    private static int findIndex(int[] arr, int mode) {
+        int item = arr[0];
+        int item_index = 0;
+        for (int i=1; i<arr.length; i++) {
+            if (mode == 0) {
+                if (arr[i] > item){continue;}
             } else {
-                continue;
+                if (arr[i] < item){continue;}
             }
+            item = arr[i];
+            item_index = i;
         }
-        return biggest_index;
+        return item_index;
     }
 }
